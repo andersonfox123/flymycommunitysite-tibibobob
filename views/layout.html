@@ -61,27 +61,34 @@
       <script src="https://cdn.rawgit.com/webriq/update_elements/master/index.js"></script>
       <script type="text/javascript" src="https://s7.addthis.com/js/300/addthis_widget.js#pubid=ra-59f69bb3eb4c4db8"></script>
       <script>
-        var ga = window[window['GoogleAnalyticsObject'] || 'ga'];
-        if (typeof ga == 'function') {
+        onLoadGA(function() {
+          $(".at-share-btn.at-svc-email").on("click", function() {
+            ga('send', { hitType: 'event', eventCategory: 'Social Share Video', eventAction: 'click-email' });
+          });
+          $(".at-share-btn.at-svc-facebook").on("click", function() {
+            ga('send', { hitType: 'event', eventCategory: 'Social Share Video', eventAction: 'click-facebook' });
+          });
+          $(".at-share-btn.at-svc-twitter").on("click", function() {
+            ga('send', { hitType: 'event', eventCategory: 'Social Share Video', eventAction: 'click-twitter' });
+          });
+          $(".at-share-btn.at-svc-google_plusone_share").on("click", function() {
+            ga('send', { hitType: 'event', eventCategory: 'Social Share Video', eventAction: 'click-google_plus' });
+          });
+          $(".at-share-btn.at-svc-messenger").on("click", function() {
+            ga('send', { hitType: 'event', eventCategory: 'Social Share Video', eventAction: 'click-messenger' });
+          });
+        });
 
-          $("document").ready(function() {
-            $(".at-share-btn.at-svc-email").on("click", function() {
-              ga('send', { hitType: 'event', eventCategory: 'Social Share Video', eventAction: 'click-email' });
-            });
-            $(".at-share-btn.at-svc-facebook").on("click", function() {
-              ga('send', { hitType: 'event', eventCategory: 'Social Share Video', eventAction: 'click-facebook' });
-            });
-            $(".at-share-btn.at-svc-twitter").on("click", function() {
-              ga('send', { hitType: 'event', eventCategory: 'Social Share Video', eventAction: 'click-twitter' });
-            });
-            $(".at-share-btn.at-svc-google_plusone_share").on("click", function() {
-              ga('send', { hitType: 'event', eventCategory: 'Social Share Video', eventAction: 'click-google_plus' });
-            });
-            $(".at-share-btn.at-svc-messenger").on("click", function() {
-              ga('send', { hitType: 'event', eventCategory: 'Social Share Video', eventAction: 'click-messenger' });
-            });
-          })
+        /** When GA is loaded, do cb */
+        onLoadGA = function(cb) {
+          var ga = window[window['GoogleAnalyticsObject'] || 'ga'];
+          if (typeof ga != 'function') {
+            setTimeout(function() {
+              onGA(cb); 
+            }, 250);
+          }
 
+          cb();
         }
       </script>
     </block>
