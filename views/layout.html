@@ -59,32 +59,41 @@
       <script src="js/jquery.min.js"></script>
       <script src="js/bootstrap.min.js"></script>
       <script src="https://cdn.rawgit.com/webriq/update_elements/master/index.js"></script>
+      <script src="https://player.vimeo.com/api/player.js"></script>
       <script type="text/javascript" src="https://s7.addthis.com/js/300/addthis_widget.js#pubid=ra-59f69bb3eb4c4db8"></script>
       <script>
+        function onLoadGA(cb) {
+          if (typeof ga === 'function') {
+            console.log('Loaded :'+ ga);
+            cb();
+          } else {
+            console.log('Not loaded');
+            setTimeout(onLoadGA, 500);
+          }
+        }
+        
         onLoadGA(function() {
-          // Alert a message when the user shares somewhere
+          //+ AddThis tracking start
           function eventHandler(evt) {     
             if (evt.type == 'addthis.menu.share') { 
                 // console.log(evt.data); // evt.data is an object hash containing all event data
-                ga('send', { hitType: 'event', eventCategory: 'Social Share Video', eventAction: `click-${evt.data.service}` });
+                ga('send', { hitType: 'event', eventCategory: 'Social Share', eventAction: `click-${evt.data.service}` });
             }
           }
 
           // Listen to various events
           addthis.addEventListener('addthis.menu.share', eventHandler);
+          //- AddThis tracking end
+
+          //+ Vimeo tracking start
+          var iframe = document.querySelector('iframe');
+          var player = new Vimeo.Player(iframe);
+
+          player.on('play', function() {
+            ga('send', { hitType: 'event', eventCategory: 'Video', eventAction: `play` });
+          });
+          //- Vimeo tracking end
         });
-
-        /** When GA is loaded, do cb */
-        onLoadGA = function(cb) {
-          var ga = window[window['GoogleAnalyticsObject'] || 'ga'];
-          if (typeof ga != 'function') {
-            setTimeout(function() {
-              onGA(cb); 
-            }, 250);
-          }
-
-          cb();
-        }
       </script>
     </block>
   </body>
